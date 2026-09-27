@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>STUDY // QUOTE</title>
+<meta name="theme-color" content="#000000">
+<meta name="description" content="몰입·학습·독서·사유에 관한 고전 명언 100개 중 하나를 랜덤으로 보여줍니다.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="QUOTE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&family=Nanum+Gothic+Coding:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css" rel="stylesheet">
+<style>
+/* ===== TOKENS (3색만 사용) ===== */
+:root {
+  --bg: #000000;
+  --fg: #FFFFFF;
+  --dim: rgba(255,255,255,0.45);
+  --pixel-en: "Press Start 2P", "DotGothic16", "Nanum Gothic Coding", monospace;
+  --pixel-cjk: "DotGothic16", "Galmuri11", "Nanum Gothic Coding", monospace;
+  --pixel-ko: "Galmuri11", "Galmuri9", "DungGeunMo", "Nanum Gothic Coding", monospace;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#000000; --fg:#FFFFFF; } }
+:root[data-theme="dark"] { --bg:#000000; --fg:#FFFFFF; }
+*, *::before, *::after { box-sizing: inherit; margin: 0; }
+
+html { height: 100%; background: var(--bg); scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--pixel-ko);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: never;
+  text-rendering: optimizeSpeed;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== LAYOUT ===== */
+.screen {
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 28px 22px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.status {
+  font-family: var(--pixel-en);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  line-height: 1.6;
+}
+.stage {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 7vh 0 11vh;   /* 아래 여백이 더 커서 살짝 위로 */
+}
+
+/* ===== QUOTE ===== */
+.original {
+  font-family: var(--pixel-en);
+  color: var(--fg);
+  text-transform: uppercase;
+  line-height: 1.8;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+}
+.original.len-s { font-size: clamp(16px, 4.2vw, 28px); }
+.original.len-m { font-size: clamp(13px, 3.4vw, 20px); }
+.original.len-l { font-size: clamp(11px, 2.9vw, 16px); line-height: 1.9; }
+.original.cjk {
+  font-family: var(--pixel-cjk);
+  text-transform: none;
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+}
+.original.cjk.len-s { font-size: clamp(24px, 7vw, 38px); }
+.original.cjk.len-m { font-size: clamp(20px, 5.6vw, 30px); }
+.original.cjk.len-l { font-size: clamp(17px, 4.6vw, 24px); }
+
+.korean {
+  margin-top: 2.6em;
+  font-family: var(--pixel-ko);
+  font-size: clamp(13px, 3.6vw, 16px);
+  line-height: 1.9;
+  color: var(--dim);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.credit { margin-top: 3.2em; line-height: 2; }
+.author {
+  font-family: var(--pixel-en);
+  font-size: 10px;
+  color: var(--fg);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.source {
+  font-family: var(--pixel-en);
+  font-size: 8px;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+/* 한자 저자/출전은 한자 픽셀 폰트로 */
+.author.cjk, .source.cjk { font-family: var(--pixel-cjk); font-size: 14px; letter-spacing: 0.08em; }
+.source.cjk { font-size: 12px; }
+.source:empty, .author:empty { display: none; }
+
+/* ===== BUTTON ===== */
+.next {
+  font-family: var(--pixel-en);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 0;
+  padding: 16px 28px;
+  min-width: 200px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: none;
+}
+@media (hover: hover) {
+  .next:hover { background: #fff; color: #000; }
+}
+.next:active { background: #fff; color: #000; transform: translate(1px, 1px); }
+.next:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+
+/* ===== MOTION: 끊기는 전환 ===== */
+.quote.off { visibility: hidden; }
+.quote.on { animation: appear 0.16s steps(2, end); }
+@keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .quote.on { animation: none; }
+  .next:active { transform: none; }
+}
+
+/* ===== COPY ===== */
+.controls { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.copy {
+  font-family: var(--pixel-en);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  background: #000;
+  color: var(--dim);
+  border: 2px solid var(--dim);
+  border-radius: 0;
+  padding: 10px 18px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (hover: hover) { .copy:hover { background: #fff; color: #000; border-color: #fff; } }
+.copy:active { background: #fff; color: #000; border-color: #fff; transform: translate(1px, 1px); }
+.copy:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .copy:active { transform: none; } }
+
+</style>
+</head>
+<body>
+<main class="screen">
+  <p class="status" id="status" aria-hidden="true">STUDY // QUOTE ---</p>
+
+  <section class="stage" aria-live="polite">
+    <figure class="quote" id="quote">
+      <blockquote class="original" id="original"></blockquote>
+      <p class="korean" id="korean"></p>
+      <figcaption class="credit">
+        <div class="author" id="author"></div>
+        <div class="source" id="source"></div>
+      </figcaption>
+    </figure>
+  </section>
+
+  <div class="controls">
+    <button type="button" class="next" id="next">NEXT QUOTE</button>
+    <button type="button" class="copy" id="copy">COPY</button>
+  </div>
+</main>
+
+<script>
+/* =====================================================
+   QUOTE DATA
+   - 원문(original), 번역(korean), 저자(author), 출전(source)은 제공된 그대로.
+   - 원본에 없는 author/source는 빈 문자열("")로 둠.
+   - star: 원본의 ⭐ 표시 / note: 원본의 → 메모 (화면에는 표시하지 않음)
+   - 추가·수정은 이 배열만 고치면 됨.
+===================================================== */
+const QUOTES = [
+  { original: "Reading maketh a full man; conference a ready man; and writing an exact man.", korean: "독서는 사람을 채우고, 토론은 사람을 준비시키며, 글쓰기는 사람을 정확하게 만든다.", author: "Francis Bacon", source: "Of Studies", category: "WRITING", star: true },
+  { original: "Studies serve for delight, for ornament, and for ability.", korean: "학문은 즐거움을 주고, 사람을 빛내며, 능력을 길러준다.", author: "Francis Bacon", source: "Of Studies", category: "LEARNING" },
+  { original: "Read not to contradict and confute; nor to believe and take for granted; nor to find talk and discourse; but to weigh and consider.", korean: "반박하려고 읽지 말고, 그대로 믿으려고 읽지도 말며, 이야기거리를 찾으려고 읽지도 말라. 저울질하고 숙고하기 위해 읽어라.", author: "Francis Bacon", source: "Of Studies", category: "READING", star: true },
+  { original: "Some books are to be tasted, others to be swallowed, and some few to be chewed and digested.", korean: "어떤 책은 맛만 보면 되고, 어떤 책은 삼켜야 하며, 몇몇 책은 씹어서 소화해야 한다.", author: "Francis Bacon", source: "Of Studies", category: "READING", star: true },
+  { original: "Crafty men contemn studies, simple men admire them, and wise men use them.", korean: "영리한 체하는 사람은 학문을 업신여기고, 단순한 사람은 학문을 우러러보며, 지혜로운 사람은 학문을 이용한다.", author: "Francis Bacon", source: "Of Studies", category: "LEARNING" },
+  { original: "Studies perfect nature, and are perfected by experience.", korean: "학문은 타고난 능력을 완성하고, 학문 자체는 경험에 의해 완성된다.", author: "Francis Bacon", source: "Of Studies", category: "LEARNING", star: true },
+  { original: "Histories make men wise; poets witty; the mathematics subtile; natural philosophy deep; moral grave; logic and rhetoric able to contend.", korean: "역사는 사람을 지혜롭게 하고, 시는 재치를 주며, 수학은 치밀하게 하고, 자연철학은 깊게 하며, 도덕은 진중하게 하고, 논리와 수사학은 논쟁할 힘을 준다.", author: "Francis Bacon", source: "Of Studies", category: "LEARNING" },
+  { original: "If a man write little, he had need have a great memory.", korean: "글을 거의 쓰지 않는 사람이라면 아주 좋은 기억력이 필요하다.", author: "Francis Bacon", source: "Of Studies", category: "WRITING" },
+  { original: "If a man's wit be wandering, let him study the mathematics.", korean: "정신이 자꾸 흩어진다면 수학을 공부하게 하라.", author: "Francis Bacon", source: "Of Studies", category: "ATTENTION", star: true },
+  { original: "Every defect of the mind may have a special receipt.", korean: "마음의 각각의 결함에는 저마다 맞는 처방이 있을 수 있다.", author: "Francis Bacon", source: "Of Studies", category: "THINKING" },
+
+  { original: "學而時習之，不亦說乎？", korean: "배우고 그것을 때때로 되짚어 익히니, 또한 기쁘지 아니한가.", author: "孔子", source: "《論語》", category: "PRACTICE", star: true },
+  { original: "學而不思則罔，思而不學則殆。", korean: "배우기만 하고 생각하지 않으면 막막해지고, 생각하기만 하고 배우지 않으면 위태롭다.", author: "孔子", source: "《論語》", category: "THINKING", star: true },
+  { original: "知之為知之，不知為不知，是知也。", korean: "아는 것은 안다고 하고, 모르는 것은 모른다고 하는 것. 그것이 앎이다.", author: "孔子", source: "《論語》", category: "THINKING" },
+  { original: "溫故而知新，可以為師矣。", korean: "옛것을 되짚어 거기서 새로운 것을 알아낼 수 있다면 스승이 될 만하다.", author: "孔子", source: "《論語》", category: "LEARNING", star: true },
+  { original: "敏而好學，不恥下問。", korean: "배우기를 좋아하고, 자신보다 아랫사람에게 묻는 것도 부끄러워하지 않는다.", author: "孔子", source: "《論語》", category: "LEARNING" },
+  { original: "三人行，必有我師焉。", korean: "세 사람이 함께 길을 가면, 그중에는 반드시 나의 스승이 있다.", author: "孔子", source: "《論語》", category: "LEARNING" },
+  { original: "知之者不如好之者，好之者不如樂之者。", korean: "아는 사람은 좋아하는 사람만 못하고, 좋아하는 사람은 즐기는 사람만 못하다.", author: "孔子", source: "《論語》", category: "LEARNING", star: true },
+  { original: "不憤不啟，不悱不發；舉一隅不以三隅反，則不復也。", korean: "스스로 답을 찾아 애태우지 않으면 열어주지 않고, 표현하려 애쓰지 않으면 말해주지 않는다. 한 모퉁이를 보여주었는데 나머지 세 모퉁이를 스스로 찾아내지 못한다면 다시 가르쳐주지 않는다.", author: "孔子", source: "《論語》", category: "THINKING", star: true },
+  { original: "默而識之，學而不厭，誨人不倦。", korean: "묵묵히 마음에 새기고, 배우는 데 싫증내지 않으며, 가르치는 데 지치지 않는다.", author: "孔子", source: "《論語》", category: "DISCIPLINE" },
+  { original: "吾嘗終日不食，終夜不寢，以思，無益，不如學也。", korean: "나는 하루 종일 먹지 않고 밤새 잠들지 않으며 생각해본 적이 있다. 그러나 별 도움이 없었다. 배우는 것만 못했다.", author: "孔子", source: "《論語》", category: "LEARNING", star: true },
+
+  { original: "博學而篤志，切問而近思。", korean: "넓게 배우되 뜻을 굳게 하고, 절실하게 묻되 가까운 것부터 생각하라.", author: "", source: "《論語》", category: "THINKING" },
+  { original: "工欲善其事，必先利其器。", korean: "장인이 일을 잘하려면 먼저 자신의 도구부터 날카롭게 해야 한다.", author: "", source: "《論語》", category: "PRACTICE" },
+  { original: "見賢思齊焉，見不賢而內自省也。", korean: "훌륭한 사람을 보면 그와 같아지기를 생각하고, 그렇지 않은 사람을 보면 자신을 돌아보라.", author: "", source: "《論語》", category: "THINKING" },
+  { original: "欲速則不達，見小利則大事不成。", korean: "서두르면 도달하지 못하고, 작은 이익에 매달리면 큰일을 이루지 못한다.", author: "", source: "《論語》", category: "DISCIPLINE", star: true },
+  { original: "歲寒，然後知松柏之後凋也。", korean: "추운 계절이 와야 소나무와 잣나무가 가장 늦게 시드는 줄 알게 된다.", author: "", source: "《論語》", category: "DISCIPLINE" },
+
+  { original: "學不可以已。", korean: "배움은 멈출 수 없다.", author: "荀子", source: "《勸學》", category: "LEARNING", star: true },
+  { original: "青，取之於藍，而青於藍；冰，水為之，而寒於水。", korean: "푸른 물감은 쪽에서 나오지만 쪽보다 더 푸르고, 얼음은 물에서 생기지만 물보다 더 차갑다.", author: "荀子", source: "《勸學》", category: "LEARNING" },
+  { original: "吾嘗終日而思矣，不如須臾之所學也。", korean: "나는 하루 종일 생각해보기도 했지만, 잠깐이라도 제대로 배우는 것만 못했다.", author: "荀子", source: "《勸學》", category: "LEARNING", star: true },
+  { original: "吾嘗跂而望矣，不如登高之博見也。", korean: "발돋움하며 멀리 보려 해도, 높은 곳에 올라 넓게 보는 것만 못하다.", author: "荀子", source: "《勸學》", category: "LEARNING" },
+  { original: "君子生非異也，善假於物也。", korean: "뛰어난 사람이라고 타고난 본성이 특별한 것이 아니다. 외부의 도구를 잘 활용할 뿐이다.", author: "荀子", source: "《勸學》", category: "LEARNING", star: true },
+  { original: "積土成山，風雨興焉；積水成淵，蛟龍生焉。", korean: "흙이 쌓여 산을 이루면 바람과 비가 생기고, 물이 쌓여 깊은 못을 이루면 용이 산다.", author: "荀子", source: "《勸學》", category: "PRACTICE" },
+  { original: "不積跬步，無以至千里；不積小流，無以成江海。", korean: "작은 걸음을 쌓지 않으면 천 리에 이를 수 없고, 작은 물줄기를 모으지 않으면 강과 바다를 이룰 수 없다.", author: "荀子", source: "《勸學》", category: "PRACTICE", star: true },
+  { original: "騏驥一躍，不能十步；駑馬十駕，功在不舍。", korean: "천리마도 한 번 뛰어 열 걸음을 갈 수는 없지만, 둔한 말도 열 번을 계속 달리면 해낼 수 있다. 공은 멈추지 않는 데 있다.", author: "荀子", source: "《勸學》", category: "PRACTICE" },
+  { original: "鍥而舍之，朽木不折；鍥而不舍，金石可鏤。", korean: "새기다 그만두면 썩은 나무조차 끊지 못하지만, 계속 새기면 쇠와 돌에도 새길 수 있다.", author: "荀子", source: "《勸學》", category: "PRACTICE", star: true },
+  { original: "蚓無爪牙之利，筋骨之強……用心一也。", korean: "지렁이에게 날카로운 발톱이나 강한 뼈가 없어도 해내는 것은 마음을 하나에 쓰기 때문이다.", author: "荀子", source: "《勸學》", category: "ATTENTION", star: true },
+
+  { original: "為學日益，為道日損。", korean: "배움에서는 날마다 더하고, 도에서는 날마다 덜어낸다.", author: "老子", source: "《道德經》 48", category: "LEARNING", star: true },
+  { original: "合抱之木，生於毫末。", korean: "두 팔로도 안기 어려운 큰 나무도 아주 작은 싹에서 시작한다.", author: "老子", source: "", category: "PRACTICE" },
+  { original: "九層之臺，起於累土。", korean: "아홉 층의 높은 누대도 한 줌 한 줌 쌓은 흙에서 시작한다.", author: "老子", source: "", category: "PRACTICE" },
+  { original: "千里之行，始於足下。", korean: "천 리의 길도 발아래 한 걸음에서 시작한다.", author: "老子", source: "", category: "PRACTICE", star: true },
+  { original: "天下難事，必作於易；天下大事，必作於細。", korean: "세상의 어려운 일은 쉬운 것에서 시작되고, 큰일은 작은 것에서 시작된다.", author: "老子", source: "", category: "PRACTICE", star: true },
+  { original: "知人者智，自知者明。", korean: "남을 아는 것은 지혜이고, 자신을 아는 것은 밝은 통찰이다.", author: "老子", source: "", category: "THINKING" },
+  { original: "勝人者有力，自勝者強。", korean: "남을 이기는 사람에게는 힘이 있지만, 자신을 이기는 사람이 진정 강하다.", author: "老子", source: "", category: "DISCIPLINE" },
+  { original: "慎終如始，則無敗事。", korean: "마지막을 처음처럼 신중히 한다면 실패할 일이 없다.", author: "老子", source: "", category: "DISCIPLINE", star: true },
+
+  { original: "盡信書，則不如無書。", korean: "책에 쓰인 것을 모두 믿느니 차라리 책이 없는 편이 낫다.", author: "孟子", source: "", category: "READING", star: true },
+  { original: "心之官則思，思則得之，不思則不得也。", korean: "마음의 기능은 생각하는 것이다. 생각하면 얻고, 생각하지 않으면 얻지 못한다.", author: "孟子", source: "", category: "THINKING" },
+  { original: "不以規矩，不能成方圓。", korean: "자와 컴퍼스가 없으면 네모와 원을 제대로 만들 수 없다.", author: "孟子", source: "", category: "DISCIPLINE" },
+  { original: "生於憂患，而死於安樂也。", korean: "사람은 근심과 어려움 속에서 살아나고, 안락함 속에서 쇠한다.", author: "孟子", source: "", category: "DISCIPLINE" },
+  { original: "人有不為也，而後可以有為。", korean: "하지 않는 것이 있어야 비로소 해야 할 것을 해낼 수 있다.", author: "孟子", source: "", category: "ATTENTION", star: true },
+  { original: "行有不得者，皆反求諸己。", korean: "일이 뜻대로 되지 않을 때에는 먼저 자신에게서 원인을 찾아라.", author: "孟子", source: "", category: "THINKING" },
+  { original: "一日暴之，十日寒之，未有能生者也。", korean: "하루는 볕을 쬐고 열흘은 얼려버린다면 자랄 수 있는 것은 아무것도 없다.", author: "孟子", source: "", category: "PRACTICE", star: true, note: "몰아서 하루 공부하고 열흘 쉬는 공부법에 거의 그대로 적용할 수 있는 문장." },
+
+  { original: "My experience is what I agree to attend to.", korean: "나의 경험은 결국 내가 주의를 기울이기로 한 것들이다.", author: "William James", source: "The Principles of Psychology", category: "ATTENTION", star: true },
+  { original: "Everyone knows what attention is.", korean: "주의가 무엇인지는 누구나 알고 있다.", author: "William James", source: "", category: "ATTENTION" },
+  { original: "The faculty of voluntarily bringing back a wandering attention, over and over again, is the very root of judgment, character, and will.", korean: "흩어진 주의를 자발적으로, 거듭해서 다시 가져오는 능력이야말로 판단력과 성격과 의지의 뿌리다.", author: "William James", source: "", category: "ATTENTION", star: true },
+  { original: "An education which should improve this faculty would be the education par excellence.", korean: "이 능력을 향상시키는 교육이 있다면, 그것이야말로 최고의 교육일 것이다.", author: "William James", source: "", category: "ATTENTION", star: true },
+  { original: "The longer one does attend to a topic the more mastery of it one has.", korean: "한 주제에 오래 주의를 기울일수록 그 주제를 더 깊이 지배하게 된다.", author: "William James", source: "", category: "ATTENTION" },
+  { original: "The great thing, then, in all education, is to make our nervous system our ally instead of our enemy.", korean: "교육에서 중요한 것은 우리의 신경계를 적이 아니라 동맹으로 만드는 것이다.", author: "William James", source: "", category: "PRACTICE", star: true },
+  { original: "Seize the very first possible opportunity to act on every resolution you make.", korean: "무언가를 결심했다면 행동으로 옮길 수 있는 첫 번째 기회를 붙잡아라.", author: "William James", source: "", category: "DISCIPLINE" },
+  { original: "Keep the faculty of effort alive in you by a little gratuitous exercise every day.", korean: "매일 작은 훈련을 통해 ‘노력할 수 있는 능력’을 살아 있게 하라.", author: "William James", source: "", category: "PRACTICE", star: true },
+
+  { original: "Reading furnishes the mind only with materials of knowledge; it is thinking makes what we read ours.", korean: "독서는 마음에 지식의 재료를 가져다줄 뿐이다. 읽은 것을 우리의 것으로 만드는 것은 생각이다.", author: "John Locke", source: "Of the Conduct of the Understanding", category: "READING", star: true },
+  { original: "Those who have read of everything are thought to understand everything too; but it is not always so.", korean: "모든 것을 읽은 사람은 모든 것을 이해한다고 여겨지지만, 실제로는 그렇지 않다.", author: "John Locke", source: "", category: "READING" },
+  { original: "We are of the ruminating kind.", korean: "우리는 되새김질하는 존재다.", author: "John Locke", source: "", category: "THINKING", star: true, note: "읽고 집어넣는 것보다 다시 씹어 생각하는 것이 중요하다는 문맥이다." },
+
+  { original: "He who knows only his own side of the case knows little of that.", korean: "자기 편의 주장만 아는 사람은 사실 그 주장조차 제대로 알지 못한다.", author: "John Stuart Mill", source: "On Liberty", category: "DISCUSSION", star: true },
+  { original: "If he is equally unable to refute the reasons on the opposite side, he has no ground for preferring either opinion.", korean: "반대편의 논거를 반박할 수도 없다면, 자신의 견해를 더 옳다고 선택할 근거도 없다.", author: "John Stuart Mill", source: "", category: "DISCUSSION" },
+  { original: "Both teachers and learners go to sleep at their post, as soon as there is no enemy in the field.", korean: "맞서는 상대가 사라지는 순간, 가르치는 사람도 배우는 사람도 자기 자리에서 잠들기 시작한다.", author: "John Stuart Mill", source: "", category: "DISCUSSION", star: true, note: "토론과 반론이 왜 학습을 살아 있게 만드는지 보여주는 문장." },
+  { original: "Complete liberty of contradicting and disproving our opinion is the very condition which justifies us in assuming its truth.", korean: "우리의 견해를 자유롭게 반박하고 반증할 수 있어야만, 우리는 그 견해를 참이라고 받아들일 정당성을 얻는다.", author: "John Stuart Mill", source: "", category: "DISCUSSION" },
+  { original: "The fatal tendency of mankind to leave off thinking about a thing when it is no longer doubtful.", korean: "어떤 것이 더 이상 의심스럽지 않게 되는 순간 그것에 대해 생각하기를 멈춰버리는 것, 그것이 인간의 치명적인 경향이다.", author: "John Stuart Mill", source: "", category: "THINKING", star: true },
+
+  { original: "Our life is frittered away by detail. Simplify, simplify.", korean: "우리의 삶은 사소한 것들에 산산이 소모된다. 단순하게 하라, 단순하게.", author: "Henry David Thoreau", source: "Walden", category: "ATTENTION", star: true },
+  { original: "I never found the companion that was so companionable as solitude.", korean: "나는 고독만큼 좋은 동반자를 만나본 적이 없다.", author: "Thoreau", source: "Walden", category: "ATTENTION" },
+  { original: "To read well, that is, to read true books in a true spirit, is a noble exercise.", korean: "제대로 읽는 것, 즉 진정한 책을 진정한 정신으로 읽는 것은 고귀한 훈련이다.", author: "Thoreau", source: "Walden", category: "READING", star: true },
+  { original: "Books are the treasured wealth of the world and the fit inheritance of generations and nations.", korean: "책은 세상이 간직해온 보물이며, 세대와 나라가 물려받을 만한 유산이다.", author: "Thoreau", source: "", category: "READING" },
+  { original: "A man is rich in proportion to the number of things which he can afford to let alone.", korean: "사람은 얼마나 많은 것을 굳이 하지 않아도 되는가에 비례해 부유하다.", author: "Thoreau", source: "Walden", category: "ATTENTION" },
+  { original: "So simplify the problem of life, distinguish the necessary and the real.", korean: "삶의 문제를 단순화하라. 필요한 것과 진짜인 것을 구별하라.", author: "Thoreau", source: "", category: "THINKING", star: true },
+  { original: "How vain it is to sit down to write when you have not stood up to live.", korean: "제대로 살아보지도 않고 앉아서 글을 쓰려 하는 것이 얼마나 헛된가.", author: "Thoreau", source: "", category: "WRITING" },
+
+  { original: "Lost time is never found again.", korean: "잃어버린 시간은 다시 찾을 수 없다.", author: "Benjamin Franklin", source: "", category: "DISCIPLINE", star: true },
+  { original: "Dost thou love life? Then do not squander time; for that's the stuff life is made of.", korean: "삶을 사랑하는가? 그렇다면 시간을 낭비하지 말라. 삶은 바로 시간으로 이루어져 있기 때문이다.", author: "Benjamin Franklin", source: "", category: "DISCIPLINE" },
+  { original: "You may delay, but time will not.", korean: "당신은 미룰 수 있지만 시간은 미루지 않는다.", author: "Benjamin Franklin", source: "", category: "DISCIPLINE" },
+  { original: "Never leave that till tomorrow which you can do today.", korean: "오늘 할 수 있는 일을 내일까지 남겨두지 말라.", author: "Benjamin Franklin", source: "", category: "DISCIPLINE" },
+  { original: "Sloth makes all things difficult, but industry all easy.", korean: "게으름은 모든 것을 어렵게 하고, 부지런함은 모든 것을 쉽게 한다.", author: "Benjamin Franklin", source: "", category: "DISCIPLINE" },
+  { original: "Diligence is the mother of good luck.", korean: "부지런함은 행운의 어머니다.", author: "Benjamin Franklin", source: "", category: "DISCIPLINE" },
+
+  { original: "Tout le malheur des hommes vient d'une seule chose, qui est de ne savoir pas demeurer en repos dans une chambre.", korean: "인간의 불행은 단 한 가지, 방 안에서 조용히 머물 줄 모르는 데서 비롯된다.", author: "Blaise Pascal", source: "Pensées", category: "ATTENTION", star: true },
+  { original: "Le cœur a ses raisons que la raison ne connaît point.", korean: "마음에는 이성이 알지 못하는 나름의 이유가 있다.", author: "Pascal", source: "", category: "THINKING" },
+  { original: "La dernière chose qu'on trouve en faisant un ouvrage est de savoir celle qu'il faut mettre la première.", korean: "무언가를 완성해가면서 가장 마지막에 알게 되는 것은, 무엇을 맨 처음 놓아야 하는가이다.", author: "Pascal", source: "", category: "WRITING", star: true, note: "글을 실제로 써봐야 구조가 보인다는 점에서 특히 좋은 문장." },
+  { original: "Je n'ai fait celle-ci plus longue que parce que je n'ai pas eu le loisir de la faire plus courte.", korean: "이 글이 길어진 것은 더 짧게 만들 시간이 없었기 때문이다.", author: "Pascal", source: "", category: "WRITING" },
+  { original: "L'homme n'est qu'un roseau, le plus faible de la nature; mais c'est un roseau pensant.", korean: "인간은 자연에서 가장 연약한 갈대에 불과하다. 그러나 생각하는 갈대다.", author: "Pascal", source: "", category: "THINKING" },
+  { original: "Travaillons donc à bien penser: voilà le principe de la morale.", korean: "그러므로 제대로 생각하는 데 힘쓰자. 바로 그것이 삶의 원칙이다.", author: "Pascal", source: "", category: "THINKING", star: true },
+
+  { original: "Le bon sens est la chose du monde la mieux partagée.", korean: "세상에서 가장 공평하게 나누어진 것은 양식이다.", author: "René Descartes", source: "Discours de la méthode", category: "THINKING" },
+  { original: "Diviser chacune des difficultés que j'examinerais, en autant de parcelles qu'il se pourrait.", korean: "내가 검토하는 어려움을 가능한 한 많은 작은 부분으로 나눈다.", author: "Descartes", source: "", category: "THINKING", star: true, note: "복잡한 공부를 작은 문제로 쪼개는 사고법." },
+  { original: "Ne recevoir jamais aucune chose pour vraie que je ne la connusse évidemment être telle.", korean: "명백히 참이라고 알지 못하는 것은 결코 참으로 받아들이지 않는다.", author: "Descartes", source: "", category: "THINKING" },
+  { original: "Je pense, donc je suis.", korean: "나는 생각한다. 그러므로 나는 존재한다.", author: "Descartes", source: "", category: "THINKING" },
+
+  { original: "Plutôt la tête bien faite que bien pleine.", korean: "지식으로 가득 찬 머리보다는, 제대로 만들어진 머리가 낫다.", author: "Michel de Montaigne", source: "Essais", category: "LEARNING", star: true },
+  { original: "Que sais-je?", korean: "나는 무엇을 아는가?", author: "Montaigne", source: "", category: "THINKING" },
+  { original: "Frotter et limer notre cervelle contre celle d'autrui.", korean: "우리의 머리를 다른 사람의 머리와 맞대어 문지르고 다듬어야 한다.", author: "Montaigne", source: "", category: "DISCUSSION", star: true, note: "다른 사람과의 대화와 토론을 학습 자체로 본 표현." },
+
+  { original: "Es ist nicht genug zu wissen, man muß auch anwenden; es ist nicht genug zu wollen, man muß auch tun.", korean: "아는 것만으로는 충분하지 않다. 적용해야 한다. 원하는 것만으로도 충분하지 않다. 행동해야 한다.", author: "Johann Wolfgang von Goethe", source: "", category: "PRACTICE", star: true },
+  { original: "In der Beschränkung zeigt sich erst der Meister.", korean: "제약 속에서 비로소 대가의 솜씨가 드러난다.", author: "Goethe", source: "", category: "PRACTICE" },
+  { original: "Was du ererbt von deinen Vätern hast, erwirb es, um es zu besitzen.", korean: "선대로부터 물려받은 것이라 해도, 진정 자기 것으로 가지려면 스스로 다시 얻어야 한다.", author: "Goethe", source: "Faust", category: "LEARNING" },
+  { original: "Es irrt der Mensch, solang er strebt.", korean: "인간은 노력하고 추구하는 한 오류를 범한다.", author: "Goethe", source: "Faust", category: "LEARNING", star: true, note: "틀리지 않는 공부보다 틀리면서 수정하는 공부에 더 어울리는 문장." },
+
+  { original: "I think that I am superior to the common run of men in noticing things which easily escape attention, and in observing them carefully.", korean: "나는 다른 사람들이 쉽게 지나치는 것을 알아차리고, 그것을 세심하게 관찰하는 능력에서는 보통 사람보다 나았다고 생각한다.", author: "Charles Darwin", source: "Autobiography", category: "ATTENTION", star: true },
+  { original: "From my early youth I have had the strongest desire to understand or explain whatever I observed.", korean: "어린 시절부터 나는 내가 관찰한 것은 무엇이든 이해하거나 설명하고 싶다는 강한 욕구가 있었다.", author: "Darwin", source: "", category: "THINKING" },
+  { original: "These causes combined have given me the patience to reflect or ponder for any number of years over any unexplained problem.", korean: "이런 성향들은 설명되지 않은 문제를 몇 년이고 계속 숙고할 수 있는 인내심을 내게 주었다.", author: "Darwin", source: "", category: "THINKING", star: true },
+  { original: "I have steadily endeavoured to keep my mind free so as to give up any hypothesis, however much beloved, as soon as facts are shown to be opposed to it.", korean: "나는 아무리 애착이 가는 가설이라도 사실과 어긋난다는 것이 드러나는 순간 버릴 수 있도록, 내 정신을 자유롭게 유지하려 꾸준히 노력했다.", author: "Darwin", source: "Autobiography", category: "THINKING", star: true }
+];
+
+/* =====================================================
+   SHUFFLE DECK
+   전부 한 번씩 본 뒤 다시 섞고, 경계에서도 같은 문장이 연달아 나오지 않게 함.
+===================================================== */
+const deck = { order: [], pos: 0, last: -1 };
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+function refill() {
+  deck.order = shuffle(QUOTES.map((_, i) => i));
+  if (deck.order.length > 1 && deck.order[0] === deck.last) {
+    [deck.order[0], deck.order[1]] = [deck.order[1], deck.order[0]];
+  }
+  deck.pos = 0;
+}
+function draw() {
+  if (deck.pos >= deck.order.length) refill();
+  const idx = deck.order[deck.pos++];
+  deck.last = idx;
+  return idx;
+}
+
+/* =====================================================
+   RENDER
+===================================================== */
+const CJK = /[\u3400-\u9FFF\uF900-\uFAFF]/;
+const el = {
+  quote: document.getElementById('quote'),
+  status: document.getElementById('status'),
+  original: document.getElementById('original'),
+  korean: document.getElementById('korean'),
+  author: document.getElementById('author'),
+  source: document.getElementById('source'),
+  next: document.getElementById('next')
+};
+
+function sizeClass(text, isCjk) {
+  const n = text.length;
+  if (isCjk) return n <= 12 ? 'len-s' : n <= 20 ? 'len-m' : 'len-l';
+  return n <= 60 ? 'len-s' : n <= 110 ? 'len-m' : 'len-l';
+}
+
+function render(idx) {
+  const q = QUOTES[idx];
+  const isCjk = CJK.test(q.original);
+  const num = String(idx + 1).padStart(3, '0');
+
+  el.status.textContent = `STUDY // QUOTE ${num}` + (q.category ? ` // ${q.category}` : '');
+  el.original.className = `original ${isCjk ? 'cjk ' : ''}${sizeClass(q.original, isCjk)}`;
+  el.original.textContent = isCjk ? q.original : `"${q.original}"`;
+  el.original.lang = isCjk ? 'zh-Hant' : '';
+  el.korean.textContent = q.korean || '';
+  el.author.textContent = q.author || '';
+  el.author.classList.toggle('cjk', CJK.test(q.author || ''));
+  el.source.textContent = q.source || '';
+  el.source.classList.toggle('cjk', CJK.test(q.source || ''));
+  document.title = `STUDY // QUOTE ${num}`;
+}
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let busy = false;
+
+function nextQuote() {
+  if (busy) return;
+  const idx = draw();
+  if (reduceMotion.matches) { render(idx); return; }
+  busy = true;
+  el.quote.classList.remove('on');
+  el.quote.classList.add('off');           // 사라짐
+  setTimeout(() => {                       // 아주 짧은 공백
+    render(idx);
+    el.quote.classList.remove('off');
+    void el.quote.offsetWidth;
+    el.quote.classList.add('on');          // 끊기듯 등장
+    busy = false;
+  }, 110);
+}
+
+el.next.addEventListener('click', nextQuote);
+
+/* 첫 방문: 새 랜덤 순서에서 시작 */
+refill();
+render(draw());
+el.quote.classList.add('on');
+
+/* 오프라인 지원 */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+/* ===== COPY ===== */
+const copyBtn = document.getElementById('copy');
+
+function quoteText() {
+  const credit = [el.author.textContent, el.source.textContent].filter(Boolean).join(', ');
+  return [el.original.textContent, el.korean.textContent, credit && '— ' + credit]
+    .filter(Boolean).join('\n');
+}
+
+async function copyQuote() {
+  const text = quoteText();
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const t = document.createElement('textarea');
+    t.value = text;
+    t.setAttribute('readonly', '');
+    t.style.position = 'fixed';
+    t.style.opacity = '0';
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    t.remove();
+  }
+  copyBtn.textContent = 'COPIED';
+  clearTimeout(copyBtn._t);
+  copyBtn._t = setTimeout(() => (copyBtn.textContent = 'COPY'), 1200);
+}
+
+copyBtn.addEventListener('click', copyQuote);
+
+</script>
+</body>
+</html>
